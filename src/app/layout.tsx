@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk, Geist } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/providers/AuthProvider";
+import ClientProviders from "@/providers/ClientProviders";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner"
+import ThreeBackground from "@/components/ThreeBackground";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 // Display & Body Font
 const inter = Inter({
@@ -20,8 +21,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Intelligent Workspace",
-  description: "High-cognitive load workspace for technical precision.",
+  title: "Specify",
+  description: "AI-powered architecture and specification generation.",
 };
 
 export default function RootLayout({
@@ -39,7 +40,13 @@ export default function RootLayout({
           text-content ensures it's readable but not blinding.
       */}
       <body className="min-h-full flex flex-col bg-surface text-content">
-        <AuthProvider>{children}</AuthProvider>
+        <ClientProviders>
+          <ThreeBackground />
+          <div className="relative z-10 min-h-full flex flex-col">
+            {children}
+          </div>
+          <Toaster />
+        </ClientProviders>
       </body>
     </html>
   );

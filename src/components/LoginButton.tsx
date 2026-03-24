@@ -4,18 +4,21 @@ import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button"
 
 export default function LoginButton() {
-  const loginWithGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
-  };
+    const loginWithGoogle = async () => {
+        await supabase.auth.signInWithOAuth({
+            provider: "google",
+            options: {
+                redirectTo: "http://localhost:3000/dashboard",
+            },
+        });
+    };
 
-  return (
-    <Button
-      onClick={loginWithGoogle}
-      className="px-4 py-2 btn-primary cursor-pointer"
-    >
-      Continue with Google
-    </Button>
-  );
+    return (
+        <Button
+            onClick={loginWithGoogle}
+            className="px-8 py-4 btn-primary cursor-pointer"
+        >
+            Continue with Google
+        </Button>
+    );
 }

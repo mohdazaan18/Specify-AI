@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-micro";
+import { gql } from "graphql-tag";
 
 export const typeDefs = gql`
 
@@ -15,14 +15,6 @@ type SpecSection {
   content: String
 }
 
-type AgentRun {
-  id: ID!
-  agent_name: String!
-  section_type: String!
-  status: String!
-  created_at: String!
-}
-
 type Query {
   projects: [Project]
   project(id: ID!): Project
@@ -30,10 +22,38 @@ type Query {
   agentRuns(projectId: ID!): [AgentRun]
 }
 
+type AgentRun {
+  id: ID!
+  section_type: String!
+  agent_name: String!
+  status: String!
+  created_at: String
+}
+
 type Mutation {
-  createProject(title: String!): Project
-  runAgentPipeline(projectId: ID!): Boolean
-  runAgentForSection(projectId: ID!, sectionType: String!): Boolean
-  updateSectionContent(sectionId: ID!, content: String!): Boolean
+
+  createProject(
+    title: String!
+    idea: String
+  ): Project
+
+  updateProject(
+    id: ID!
+    title: String
+    idea: String
+  ): Project
+
+  deleteProject(
+    id: ID!
+  ): Boolean
+
+  updateSection(
+    id: ID!
+    content: String
+  ): SpecSection
+
+  generateBackground(projectId: ID!): Boolean
+  generateSpec(projectId: ID!): Boolean
+  regenerateSection(projectId: ID!, sectionType: String!): Boolean
 }
 `;

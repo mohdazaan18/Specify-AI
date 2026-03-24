@@ -5,67 +5,193 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* The Charcoal Palette */
-  --color-surface: #131313;
-  --color-surface-low: #0E0E0E;
-  --color-surface-high: #2A2A2A;
+  /* ─── Surfaces ─── */
+  --color-surface: #0a0a0a;
+  --color-surface-low: #000000;
+  --color-surface-high: #121212;
+  --color-surface-card: #0c0c0c;
+  --color-surface-hover: #161616;
 
-  /* Brand & Status */
-  --color-primary: #ADC6FF;
-  --color-primary-dark: #4B8EFF;
-  --color-ai: #4EDEA3;
+  /* ─── Brand ─── */
+  --color-primary: #f8fafc;
+  --color-primary-soft: rgba(255, 255, 255, 0.1);
+  --color-accent-green: #34d399;
+  --color-accent-blue: #60a5fa;
 
-  /* Text & Lines */
-  --color-content: #E5E2E1;
-  --color-ghost: rgba(229, 226, 225, 0.1);
+  /* ─── Text — high contrast for readability ─── */
+  --color-content: #ffffff;
+  --color-content-soft: #a1a1aa;
+  --color-content-muted: #71717a;
+  --color-ghost: rgba(255, 255, 255, 0.05);
 
-  /* Typography */
+  /* ─── Status ─── */
+  --color-ok: #34d399;
+  --color-warn: #fbbf24;
+  --color-error: #f87171;
+  --color-running: #7c6dfa;
+
+  /* ─── Typography ─── */
   --font-sans: "Inter", system-ui;
-  --font-mono: "Space Grotesk", monospace;
+  --font-heading: "Space Grotesk", system-ui;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
 }
 
+/* ─── Base ─── */
 @layer base {
-  body {
-    @apply antialiased bg-background text-foreground;
-    font-family: var(--font-sans);
-  }
-
-  /* Pro-tool Sharp Headings */
-  h1, h2, h3 {
-    @apply font-bold tracking-tight text-content;
-  }
-
-  /* Technical Labels */
-  label, .label-mono {
-    @apply font-mono text-[10px] uppercase tracking-widest opacity-60;
-  }
   * {
     @apply border-border outline-ring/50;
   }
+
   html {
     @apply font-sans;
   }
+
+  body {
+    @apply antialiased;
+    font-family: var(--font-sans);
+    background: var(--color-surface-low);
+    color: var(--color-content);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    @apply font-bold tracking-tight;
+    color: var(--color-content);
+  }
+
+  /* Readable placeholder */
+  ::placeholder {
+    color: var(--color-content-muted) !important;
+    opacity: 1;
+  }
 }
 
+/* ─── Components ─── */
 @layer components {
-  /* The "Kinetic" Button */
-  .btn-primary {
-    @apply bg-gradient-to-br from-primary to-primary-dark text-[#001945] 
-           px-4 py-1.5 rounded-md font-semibold text-sm transition-transform active:scale-95;
+
+  /* Frosted glass card */
+  .card {
+    background: var(--color-surface-card);
+    border: 1px solid rgba(124, 109, 250, 0.1);
+    border-radius: 14px;
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
   }
 
-  /* The Glass AI Box */
+  .card:hover {
+    border-color: rgba(124, 109, 250, 0.22);
+    box-shadow: 0 6px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(124, 109, 250, 0.06);
+    transform: translateY(-1px);
+  }
+
+  /* Alias for old glass-panel references */
   .glass-panel {
-    @apply bg-surface-high/60 backdrop-blur-xl border border-ghost shadow-2xl;
+    background: var(--color-surface-card);
+    border: 1px solid rgba(124, 109, 250, 0.1);
+    border-radius: 14px;
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
   }
 
-  /* Clean Input */
+  .glass-panel:hover {
+    border-color: rgba(124, 109, 250, 0.22);
+    box-shadow: 0 6px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(124, 109, 250, 0.06);
+    transform: translateY(-1px);
+  }
+
+  /* Primary action button */
+  .btn-primary {
+    background: #ffffff;
+    @apply text-black px-5 py-2.5 rounded-xl font-semibold text-sm transition-all;
+    box-shadow: 0 4px 14px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .btn-primary:hover {
+    background: #f1f5f9;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.23);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Secondary / outline button */
+  .btn-secondary {
+    @apply px-4 py-2 rounded-xl text-sm font-medium transition-all;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--color-content-soft);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-content);
+  }
+
+  .btn-ghost {
+    @apply px-4 py-2 rounded-xl text-sm font-medium transition-all;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--color-content-soft);
+  }
+
+  .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-content);
+  }
+
+  /* Input */
   .input-base {
-    @apply bg-surface-low border border-transparent focus:border-primary/40 
-           outline-none px-3 py-2 rounded-md transition-all text-sm;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(124, 109, 250, 0.12);
+    @apply outline-none px-3.5 py-2.5 rounded-xl text-sm transition-all w-full;
+    color: var(--color-content);
+  }
+
+  .input-base:focus {
+    border-color: rgba(124, 109, 250, 0.4);
+    background: rgba(124, 109, 250, 0.05);
+    box-shadow: 0 0 0 3px rgba(124, 109, 250, 0.07);
+  }
+
+  /* Subtle label */
+  .label-mono {
+    font-family: var(--font-mono);
+    @apply text-[10px] uppercase tracking-widest;
+    color: var(--color-content-muted);
+  }
+
+  /* Status badge */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+
+  /* Terminal code block */
+  .terminal-box {
+    background: #06060a;
+    border: 1px solid rgba(52, 211, 153, 0.12);
+    border-radius: 10px;
+    font-family: var(--font-mono);
+    color: var(--color-accent-green);
   }
 }
 
+/* ─── Gradient text animation ─── */
+.text-gradient {
+  background: linear-gradient(120deg, #7c6dfa 0%, #a78bfa 40%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Shadcn token overrides ─── */
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: var(--font-sans);
@@ -106,74 +232,34 @@
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #09090f;
+  --foreground: #f0eeff;
+  --card: #111118;
+  --card-foreground: #f0eeff;
+  --popover: #111118;
+  --popover-foreground: #f0eeff;
+  --primary: #7c6dfa;
+  --primary-foreground: #f0eeff;
+  --secondary: #1a1a26;
+  --secondary-foreground: #f0eeff;
+  --muted: #1a1a26;
+  --muted-foreground: #6e6a8a;
+  --accent: #1a1a26;
+  --accent-foreground: #f0eeff;
+  --destructive: #f87171;
+  --border: rgba(124, 109, 250, 0.1);
+  --input: rgba(255, 255, 255, 0.04);
+  --ring: rgba(124, 109, 250, 0.35);
+  --radius: 0.75rem;
+  --sidebar: #0c0c12;
+  --sidebar-foreground: #f0eeff;
+  --sidebar-primary: #7c6dfa;
+  --sidebar-primary-foreground: #f0eeff;
+  --sidebar-accent: #1a1a26;
+  --sidebar-accent-foreground: #f0eeff;
+  --sidebar-border: rgba(124, 109, 250, 0.1);
+  --sidebar-ring: rgba(124, 109, 250, 0.35);
 }
