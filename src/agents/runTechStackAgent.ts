@@ -19,6 +19,8 @@ export async function runTechStackAgent(
             {
                 role: "system",
                 content: `You are an elite software architect determining the optimal tech stack for a project.
+You MUST carefully evaluate the complexity of the project based on the idea and requirements. 
+DO NOT OVER-ENGINEER. If it's a simple CRUD app or basic website, choose a simple, lightweight stack (e.g., SQLite, simple hosting). If it's a massive enterprise system, choose a scalable microservices stack. ALWAYS match the complexity of the tools to the actual needs of the project to avoid unnecessary complexity.
 You MUST output ONLY a pure JSON object representing the recommended tech stack.
 The JSON object MUST strictly follow this exact schema, using only these four lowercase keys containing arrays of objects with 'name' and 'reason' strings:
 {
@@ -27,7 +29,7 @@ The JSON object MUST strictly follow this exact schema, using only these four lo
   "database": [ { "name": "PostgreSQL", "reason": "Ensures ACID compliance and relational integrity for user data." } ],
   "deployment": [ { "name": "Vercel", "reason": "Seamless integration with Next.js for zero-config deployments." } ]
 }
-Choose the absolute best modern technologies for the given project. The reasoning should be concise, highly specific to the project's requirements, and professional.
+Choose the absolute best, most relevant technologies for the given project size. The reasoning should be concise, highly specific to the project's requirements, and justify why it fits the scale of the project.
 Do not include markdown blocks, explanations, or any other text. Output pure JSON only.`,
             },
             {

@@ -591,12 +591,22 @@ export default function ProjectWorkspace() {
               >
                 <div className="absolute inset-0 bg-blue-500/opacity-0 group-hover:bg-blue-500/5 transition-all duration-300 pointer-events-none" />
                 <TechStackPreview data={techStackSection.content} />
-                <button
-                  onClick={() => setExpandedTechStack(true)}
-                  className="w-full mt-4 py-2 rounded-xl text-center text-[10px] uppercase tracking-widest font-bold transition-all duration-300 text-white/40 bg-white/5 border border-white/5 hover:bg-white/10 hover:text-white hover:border-white/10"
-                >
-                  View Architecture
-                </button>
+                <div className="flex items-center gap-2 mt-4">
+                  <button
+                    onClick={() => setExpandedTechStack(true)}
+                    className="flex-1 py-2 rounded-xl text-center text-[10px] uppercase tracking-widest font-bold transition-all duration-300 text-white/40 bg-white/5 border border-white/5 hover:bg-white/10 hover:text-white hover:border-white/10"
+                  >
+                    View Stack
+                  </button>
+                  <button
+                    onClick={() => regenerateSection({ variables: { projectId, sectionType: "Tech Stack" } })}
+                    disabled={regeneratingSection || techStackRun?.status === "running"}
+                    className="flex-1 py-2 rounded-xl text-center text-[10px] uppercase tracking-widest font-bold transition-all duration-300 text-blue-400 bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 hover:text-blue-300 disabled:opacity-50 disabled:cursor-not-allowed group flex justify-center items-center gap-1.5"
+                  >
+                    <RefreshCw size={10} className={techStackRun?.status === "running" ? "animate-spin" : "group-hover:rotate-180 transition-transform duration-500"} />
+                    {techStackRun?.status === "running" ? "Generating..." : "Regenerate"}
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="p-4 rounded-2xl text-center text-[11px] text-white/30" style={{ background: "rgba(0,0,0,0.2)", border: "1px dashed rgba(255,255,255,0.08)" }}>
